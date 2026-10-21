@@ -1,0 +1,5 @@
+#!/bin/bash
+# Switch every keyboard to layout index $1 and show it in the Omarchy OSD.
+hyprctl -q switchxkblayout all "$1"
+layout=$(hyprctl devices -j | jq -r '[.keyboards[] | select(.main)][0].active_keymap // .keyboards[0].active_keymap')
+omarchy osd -i keyboard -m "$layout"
