@@ -41,7 +41,7 @@ Item {
   property var screensaverWindows: ({})
   // Music keeps the screen unlocked: while any MPRIS player is playing, the
   // lock deadline is held and re-armed once playback stops. Video players hold
-  // a Wayland idle inhibitor, which the IdleMonitor already respects, so they
+  // a Wayland or D-Bus idle inhibitor (see appInhibitPath), so they
   // block the screensaver too.
   readonly property bool mediaPlaying: {
     var players = Mpris.players ? Mpris.players.values : []
@@ -51,6 +51,12 @@ Item {
     return false
   }
   property bool lockHeldForMedia: false
+  // Apps that inhibit over D-Bus (Firefox via the portal, Chromium) instead of
+  // with a Wayland inhibitor. screensaver-inhibit-bridge owns
+  // org.freedesktop.ScreenSaver and writes the active count here.
+  readonly property string appInhibitPath: Quickshell.env("XDG_RUNTIME_DIR") + "/screensaver-inhibit"
+  property int appInhibitCount: 0
+  readonly property bool appInhibited: appInhibitCount > 0
   property int screensaverWindowCount: 0
 
   function secondsFromConfig(value, fallback) {
@@ -102,6 +108,11 @@ Item {
     logEvent("lock-rearmed", "media stopped")
     lockTimer.interval = Math.max(1, root.lockDelaySeconds) * 1000
     lockTimer.restart()
+  }
+
+  onAppInhibitedChanged: {
+    logEvent("app-inhibit", root.appInhibited ? "on" : "off")
+    if (root.appInhibited) cancelIdleCycle("app-inhibit")
   }
 
   function lockSystem(reason) {
@@ -242,6 +253,7 @@ Item {
       lockDelay: root.lockDelaySeconds,
       mediaPlaying: root.mediaPlaying,
       lockHeldForMedia: root.lockHeldForMedia,
+      appInhibitors: root.appInhibitCount,
       screensaverWindows: root.screensaverWindowCount,
       timers: {
         screensaver: screensaverTimer.running,
@@ -304,7 +316,8 @@ Item {
 
   IdleMonitor {
     id: idleMonitor
-    enabled: root.idleEnabled && root.idleTimersEnabled
+    // Disabling restarts the countdown from zero once the app releases.
+    enabled: root.idleEnabled && root.idleTimersEnabled && !root.appInhibited
     timeout: Math.max(1, root.firstIdleTimeoutSeconds)
     respectInhibitors: true
     onIsIdleChanged: root.handleIdleChanged()
@@ -380,6 +393,16 @@ Item {
     watchChanges: true
     printErrors: false
     onFileChanged: root.refreshStayAwakeState()
+  }
+
+  FileView {
+    id: appInhibitFile
+    path: root.appInhibitPath
+    watchChanges: true
+    printErrors: false
+    onFileChanged: reload()
+    onLoaded: root.appInhibitCount = Math.max(0, parseInt(String(text()).split("\n")[0], 10) || 0)
+    onLoadFailed: root.appInhibitCount = 0
   }
 
   Component.onCompleted: {

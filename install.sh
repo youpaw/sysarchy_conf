@@ -17,5 +17,8 @@ while IFS= read -r -d '' file; do
   echo "installed $dest"
 done < <(find "$src" -type f -print0)
 
+systemctl --user daemon-reload
+systemctl --user enable --now screensaver-inhibit-bridge.service
+
 hyprctl reload >/dev/null && hyprctl configerrors
 omarchy restart shell

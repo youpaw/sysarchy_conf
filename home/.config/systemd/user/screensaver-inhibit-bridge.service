@@ -1,0 +1,14 @@
+[Unit]
+Description=org.freedesktop.ScreenSaver inhibit bridge for the Omarchy idle service
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.ScreenSaver
+ExecStart=%h/.local/bin/screensaver-inhibit-bridge
+ExecStopPost=/usr/bin/rm -f %t/screensaver-inhibit
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

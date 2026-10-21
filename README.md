@@ -14,6 +14,13 @@ Personal customizations for [Omarchy](https://omarchy.org/).
 - **Idle** (`plugins/youpaw.idle`, a clone of `omarchy.idle`): a playing video
   (Wayland idle inhibitor) blocks screensaver and lock; playing music (MPRIS)
   allows the screensaver but holds the lock until playback stops.
+- **Screensaver inhibit bridge** (`~/.local/bin/screensaver-inhibit-bridge`, a
+  systemd user service): owns `org.freedesktop.ScreenSaver`, so apps that ask
+  to stay awake over D-Bus count too. Firefox goes through the desktop portal,
+  whose GTK backend forwards to that name, and nothing owned it, so YouTube
+  never blocked the screensaver. Active inhibitors are listed in
+  `$XDG_RUNTIME_DIR/screensaver-inhibit` and shown as `appInhibitors` in
+  `omarchy-shell idle status`.
 
 ## Install
 

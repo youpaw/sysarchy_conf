@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+# Owns org.freedesktop.ScreenSaver so apps that inhibit idle over D-Bus (Firefox
+# via xdg-desktop-portal-gtk, Chromium, Electron, mpv...) actually hold the
+# screen awake. Active inhibitors are published to $XDG_RUNTIME_DIR/screensaver-inhibit
+# (first line: count, then "app: reason" per inhibitor), which the youpaw.idle
+# shell plugin watches.
+import os
+import sys
+
+from gi.repository import Gio, GLib
+
+BUS_NAME = "org.freedesktop.ScreenSaver"
+PATHS = ("/org/freedesktop/ScreenSaver", "/ScreenSaver")
+STATE_PATH = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "screensaver-inhibit")
+
+XML = """
+<node>
+  <interface name="org.freedesktop.ScreenSaver">
+    <method name="Inhibit">
+      <arg type="s" name="application_name" direction="in"/>
+      <arg type="s" name="reason_for_inhibit" direction="in"/>
+      <arg type="u" name="cookie" direction="out"/>
+    </method>
+    <method name="UnInhibit">
+      <arg type="u" name="cookie" direction="in"/>
+    </method>
+    <method name="GetActive">
+      <arg type="b" name="active" direction="out"/>
+    </method>
+    <method name="GetActiveTime">
+      <arg type="u" name="seconds" direction="out"/>
+    </method>
+    <method name="SimulateUserActivity"/>
+    <signal name="ActiveChanged">
+      <arg type="b" name="active"/>
+    </signal>
+  </interface>
+</node>
+"""
+
+inhibitors = {}  # cookie -> (sender, app, reason)
+watches = {}  # sender -> name watch id
+next_cookie = 1
+
+
+def log(message):
+    print(message, flush=True)
+
+
+def write_state():
+    lines = [str(len(inhibitors))]
+    lines += [f"{app}: {reason}" for _, app, reason in inhibitors.values()]
+    with open(STATE_PATH, "w") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def drop_sender(conn, sender):
+    for cookie in [c for c, (s, _, _) in inhibitors.items() if s == sender]:
+        _, app, _ = inhibitors.pop(cookie)
+        log(f"released {cookie} ({app}): client vanished")
+    watch = watches.pop(sender, None)
+    if watch is not None:
+        Gio.bus_unwatch_name(watch)
+    write_state()
+
+
+def on_call(conn, sender, path, iface, method, params, invocation):
+    global next_cookie
+
+    if method == "Inhibit":
+        app, reason = params.unpack()
+        cookie = next_cookie
+        next_cookie += 1
+        inhibitors[cookie] = (sender, app, reason)
+        if sender not in watches:
+            watches[sender] = Gio.bus_watch_name_on_connection(
+                conn, sender, Gio.BusNameWatcherFlags.NONE, None, lambda c, name: drop_sender(c, name)
+            )
+        log(f"inhibit {cookie} ({app}): {reason}")
+        write_state()
+        invocation.return_value(GLib.Variant("(u)", (cookie,)))
+    elif method == "UnInhibit":
+        (cookie,) = params.unpack()
+        entry = inhibitors.pop(cookie, None)
+        if entry:
+            log(f"uninhibit {cookie} ({entry[1]})")
+            write_state()
+        invocation.return_value(None)
+    elif method == "GetActive":
+        invocation.return_value(GLib.Variant("(b)", (False,)))
+    elif method == "GetActiveTime":
+        invocation.return_value(GLib.Variant("(u)", (0,)))
+    else:
+        invocation.return_value(None)
+
+
+def on_bus_acquired(conn, name):
+    iface = Gio.DBusNodeInfo.new_for_xml(XML).interfaces[0]
+    for path in PATHS:
+        conn.register_object(path, iface, on_call, None, None)
+
+
+def on_name_lost(conn, name):
+    log(f"could not own {name}; is another screensaver service running?")
+    sys.exit(1)
+
+
+write_state()
+Gio.bus_own_name(
+    Gio.BusType.SESSION, BUS_NAME, Gio.BusNameOwnerFlags.NONE,
+    on_bus_acquired, lambda c, n: log(f"owning {n}"), on_name_lost,
+)
+GLib.MainLoop().run()
