@@ -10,7 +10,12 @@ Personal customizations for [Omarchy](https://omarchy.org/).
   `Space` repeatedly to cycle in most-recently-used order. Each switch shows
   the layout in the Omarchy OSD. The bar's layout widget sits next to the tray.
 - **Bindings**: tap `Super` alone for the Omarchy menu, `Super+A` for apps.
-- **Touchpad**: three-finger horizontal swipe switches workspaces.
+- **niri-style scrolling** (`hypr/looknfeel.lua`): every workspace uses the
+  scrolling layout. Windows sit on a horizontal tape and keep their width, a
+  lone window included, and the focused column is centered. Workspaces slide
+  vertically.
+- **Touchpad**: three-finger left/right scrolls between windows in the
+  workspace; three-finger up/down switches workspaces.
 - **Idle** (`plugins/youpaw.idle`, a clone of `omarchy.idle`): a playing video
   (Wayland idle inhibitor) blocks screensaver and lock; playing music (MPRIS)
   allows the screensaver but holds the lock until playback stops.

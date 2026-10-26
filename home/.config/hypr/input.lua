@@ -48,13 +48,12 @@
 -- o.window("(Alacritty|kitty|foot)", { scroll_touchpad = 1.5 })
 -- o.window("com.mitchellh.ghostty", { scroll_touchpad = 0.2 })
 
--- Enable touchpad gestures for changing workspaces.
+-- niri-style touchpad gestures (see looknfeel.lua for the scrolling layout).
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Gestures/
-hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
-
--- Enable touchpad gestures for moving focus (helpful on scrolling layout).
--- hl.gesture({ fingers = 3, direction = "left", action = function() hl.dispatch(hl.dsp.focus({ direction = "l" })) end })
--- hl.gesture({ fingers = 3, direction = "right", action = function() hl.dispatch(hl.dsp.focus({ direction = "r" })) end })
+-- Three fingers left/right scroll the window tape of the current workspace.
+hl.gesture({ fingers = 3, direction = "horizontal", action = "scroll_move" })
+-- Three fingers up/down switch between workspaces.
+hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })
 
 -- US (kept first so SUPER bindings keep working), French and Russian layouts.
 -- Cycle between them with SUPER+SPACE (see bindings.lua).

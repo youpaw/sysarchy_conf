@@ -1,37 +1,195 @@
--- Keep only your personal keybinding overrides here. Add new bindings or
--- unbind defaults before replacing them.
+-- Personal keybinding overrides on top of the Omarchy defaults.
+-- See current bindings: omarchy menu keybindings --print
+--
+-- Every default this file takes over is unbound first, in one block, so a
+-- later bind can never be undone by an unbind further down.
 
--- See current bindings and descriptions:
---   omarchy menu keybindings --print
+-- ---------------------------------------------------------------------------
+-- Free the defaults we take over
+-- ---------------------------------------------------------------------------
 
--- To disable every Omarchy default binding, set this in
--- ~/.config/hypr/hyprland.lua before require("default.hypr.omarchy"), then add
--- only the bindings you want below:
---   omarchy_default_bindings = false
+-- Applications
+hl.unbind("SUPER + RETURN")              -- was: Terminal
+hl.unbind("SUPER + SHIFT + RETURN")      -- was: Browser
+hl.unbind("SUPER + SHIFT + B")           -- was: Browser
+hl.unbind("SUPER + SHIFT + ALT + B")     -- was: Browser (private)
+hl.unbind("SUPER + SHIFT + F")           -- was: File manager
+hl.unbind("SUPER + ALT + SHIFT + F")     -- was: File manager (cwd)
+hl.unbind("SUPER + SHIFT + N")           -- was: Editor
+hl.unbind("SUPER + CTRL + Q")            -- was: Calculator
 
--- To disable all preinstalled app/webapp bindings, set:
---   omarchy_preinstalled_bindings = false
+-- Menus
+hl.unbind("SUPER + SPACE")               -- was: Omarchy menu
+hl.unbind("SUPER + ALT + SPACE")         -- was: Apps menu
+hl.unbind("SUPER + SHIFT + code:201")    -- was: Omarchy menu (Copilot key, not present)
+hl.unbind("SUPER + SHIFT + CTRL + A")    -- was: Agent
+hl.unbind("SUPER + K")                   -- was: Keybindings
+hl.unbind("SUPER + ALT + K")             -- was: Tmux keybindings
+hl.unbind("SUPER + CTRL + K")            -- was: Herdr keybindings
 
--- Add a new binding.
--- o.bind("SUPER + SHIFT + R", "SSH", "alacritty -e ssh your-server")
+-- Windows
+hl.unbind("SUPER + W")                   -- was: Close window
+hl.unbind("CTRL + ALT + DELETE")         -- was: Close all windows
+hl.unbind("SUPER + T")                   -- was: Toggle floating/tiling
+hl.unbind("SUPER + O")                   -- was: Pop window out (float & pin)
+hl.unbind("SUPER + P")                   -- was: Pseudo window
+hl.unbind("SUPER + J")                   -- was: Toggle window split
+hl.unbind("SUPER + F")                   -- was: Full screen
+hl.unbind("SUPER + ALT + F")             -- was: Full width
+hl.unbind("SUPER + CTRL + F")            -- was: Tiled full screen
+hl.unbind("SUPER + CTRL + LEFT")         -- was: Move grouped window focus left
+hl.unbind("SUPER + CTRL + RIGHT")        -- was: Move grouped window focus right
+-- -/= resize keys (resizing lives on arrows; -/= become monitor scaling).
+for _, mods in ipairs({ "SUPER", "SUPER + SHIFT", "SUPER + ALT", "SUPER + SHIFT + ALT", "SUPER + CTRL", "SUPER + CTRL + SHIFT" }) do
+  hl.unbind(mods .. " + code:20")
+  hl.unbind(mods .. " + code:21")
+end
 
--- Change an existing binding by unbinding it first, then binding the key again.
--- This example changes SUPER+SPACE from the launcher to the Omarchy root menu.
--- hl.unbind("SUPER + SPACE")
--- o.bind("SUPER + SPACE", "Omarchy menu", "omarchy-menu toggle root")
+-- Workspaces
+hl.unbind("SUPER + L")                   -- was: Toggle workspace layout
+hl.unbind("SUPER + ALT + S")             -- was: Move window to scratchpad
 
--- Disable a default binding without replacing it.
--- hl.unbind("SUPER + SHIFT + B")
+-- Look
+hl.unbind("SUPER + BACKSPACE")           -- was: Toggle window transparency
+hl.unbind("SUPER + SHIFT + BACKSPACE")   -- was: Toggle window gaps
+hl.unbind("SUPER + CTRL + BACKSPACE")    -- was: Toggle single-window square aspect
+hl.unbind("SUPER + SLASH")               -- was: Monitor scaling up
+hl.unbind("SUPER + ALT + SLASH")         -- was: Monitor scaling down
 
--- Logitech MX Keys examples:
--- o.bind("SUPER + SHIFT + S", nil, "omarchy-capture-screenshot")
--- o.bind("SUPER + H", nil, "voxtype record toggle")
--- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
+-- Utilities
+hl.unbind("SUPER + C")                   -- was: Universal copy
+hl.unbind("SUPER + V")                   -- was: Universal paste
+hl.unbind("SUPER + X")                   -- was: Universal cut
+hl.unbind("SUPER + CTRL + V")            -- was: Clipboard manager
+hl.unbind("SUPER + CTRL + R")            -- was: Set reminder
+hl.unbind("SUPER + CTRL + ALT + R")      -- was: Show reminders
+hl.unbind("SUPER + SHIFT + CTRL + R")    -- was: Clear reminders
+hl.unbind("SUPER + CTRL + ALT + D")      -- was: Calendar
+hl.unbind("SUPER + CTRL + ALT + W")      -- was: Toggle weather (left unassigned)
+hl.unbind("SUPER + CTRL + L")            -- was: Lock system
 
--- GNOME-style layout switching (SUPER+SPACE was: Omarchy menu).
--- Tap SUPER+SPACE to flip to the last used layout; hold SUPER and press SPACE
--- repeatedly to walk the layouts in most-recently-used order. The choice is
--- committed when SUPER is released. Indexes match kb_layout in input.lua.
+-- ---------------------------------------------------------------------------
+-- Menus
+-- ---------------------------------------------------------------------------
+
+-- Tap SUPER alone for the Omarchy menu (fires on release, so SUPER combos still work).
+o.bind("SUPER + SUPER_L", "Omarchy menu", "omarchy-menu toggle", { release = true })
+o.bind("SUPER + A", "Apps menu", "omarchy-menu toggle apps")
+o.bind("SUPER + N", "Agent", "omarchy-agent --pick")
+o.bind("SUPER + M", "Keybindings", "omarchy-menu-keybindings")
+o.bind("SUPER + ALT + M", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
+o.bind("SUPER + CTRL + M", "Herdr keybindings", "omarchy-menu-herdr-keybindings")
+
+-- ---------------------------------------------------------------------------
+-- Applications
+-- ---------------------------------------------------------------------------
+
+o.bind("SUPER + T", "Terminal", { omarchy = "terminal" })
+o.bind("SUPER + B", "Browser", { omarchy = "browser" })
+o.bind("SUPER + ALT + B", "Browser (private)", { omarchy = "browser --private" })
+o.bind("SUPER + D", "File manager", { omarchy = "nautilus" })
+o.bind("SUPER + ALT + D", "File manager (cwd)", { omarchy = "nautilus-cwd" })
+o.bind("SUPER + E", "Omawrite", { launch = "omawrite" })
+o.bind("SUPER + C", "Calculator", "omacalc")
+
+-- ---------------------------------------------------------------------------
+-- Windows
+-- ---------------------------------------------------------------------------
+
+-- Some layout dispatchers only exist on one layout and error on the other;
+-- wrap them so the key does nothing elsewhere.
+local function on_layout(layout, dispatcher)
+  return function()
+    local workspace = hl.get_active_workspace()
+    if workspace and workspace.tiled_layout == layout then
+      hl.dispatch(dispatcher)
+    end
+  end
+end
+
+o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
+o.bind("SUPER + SHIFT + Q", "Close all windows", "omarchy-hyprland-window-close-all")
+
+-- State: float on O, pop out on P, pseudo on U.
+o.bind("SUPER + O", "Toggle window floating/tiling", hl.dsp.window.float({ action = "toggle" }))
+o.bind("SUPER + P", "Pop window out (float & pin)", "omarchy-hyprland-window-pop")
+o.bind("SUPER + U", "Pseudo window", hl.dsp.window.pseudo())
+
+-- niri-style sizing: full width, tiled full screen, true full screen.
+o.bind("SUPER + F", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
+o.bind("SUPER + ALT + F", "Tiled full screen", "omarchy-hyprland-window-tiled-fullscreen-toggle")
+o.bind("SUPER + CTRL + F", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+
+-- Resize with arrows (hold to repeat).
+local resize_steps = {
+  { mods = "SUPER + CTRL", size = 100, label = "" },
+  { mods = "SUPER + CTRL + SHIFT", size = 25, label = " a little" },
+}
+for _, step in ipairs(resize_steps) do
+  local s = step.size
+  o.bind(step.mods .. " + RIGHT", "Grow window width" .. step.label, hl.dsp.window.resize({ x = s, y = 0, relative = true }), { repeating = true })
+  o.bind(step.mods .. " + LEFT", "Shrink window width" .. step.label, hl.dsp.window.resize({ x = -s, y = 0, relative = true }), { repeating = true })
+  o.bind(step.mods .. " + DOWN", "Grow window height" .. step.label, hl.dsp.window.resize({ x = 0, y = s, relative = true }), { repeating = true })
+  o.bind(step.mods .. " + UP", "Shrink window height" .. step.label, hl.dsp.window.resize({ x = 0, y = -s, relative = true }), { repeating = true })
+end
+
+-- Dwindle: toggle the split direction.
+o.bind("SUPER + W", "Toggle window split (dwindle)", on_layout("dwindle", hl.dsp.layout("togglesplit")))
+
+-- Scrolling, niri-style consume/expel: pull the window into the column on its
+-- left/right, or out into its own column if it shares one.
+o.bind("SUPER + BRACKETLEFT", "Merge window into left column / split out (scrolling)", on_layout("scrolling", hl.dsp.layout("consume_or_expel prev")))
+o.bind("SUPER + BRACKETRIGHT", "Merge window into right column / split out (scrolling)", on_layout("scrolling", hl.dsp.layout("consume_or_expel next")))
+
+-- ---------------------------------------------------------------------------
+-- Workspaces
+-- ---------------------------------------------------------------------------
+
+-- Vertical workspaces, niri-style: J goes down (next), K goes up (previous).
+o.bind("SUPER + J", "Workspace below", hl.dsp.focus({ workspace = "r+1" }))
+o.bind("SUPER + K", "Workspace above", hl.dsp.focus({ workspace = "r-1" }))
+o.bind("SUPER + SHIFT + J", "Move window to workspace below", hl.dsp.window.move({ workspace = "r+1" }))
+o.bind("SUPER + SHIFT + K", "Move window to workspace above", hl.dsp.window.move({ workspace = "r-1" }))
+o.bind("SUPER + SHIFT + ALT + J", "Move window silently to workspace below", hl.dsp.window.move({ workspace = "r+1", follow = false }))
+o.bind("SUPER + SHIFT + ALT + K", "Move window silently to workspace above", hl.dsp.window.move({ workspace = "r-1", follow = false }))
+
+o.bind("SUPER + Y", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
+o.bind("SUPER + SHIFT + S", "Move window to scratchpad", hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
+
+-- ---------------------------------------------------------------------------
+-- Look
+-- ---------------------------------------------------------------------------
+
+o.bind("SUPER + SLASH", "Toggle window transparency", "omarchy-hyprland-window-transparency-toggle")
+o.bind("SUPER + SHIFT + SLASH", "Toggle window gaps", "omarchy-hyprland-window-gaps-toggle")
+o.bind("SUPER + CTRL + SLASH", "Toggle single-window square aspect", "omarchy-hyprland-window-single-square-aspect-toggle")
+
+-- Monitor scaling on -/= (code:20 is minus, code:21 is equal).
+o.bind("SUPER + code:20", "Monitor scaling down", "omarchy-hyprland-monitor-scaling down")
+o.bind("SUPER + code:21", "Monitor scaling up", "omarchy-hyprland-monitor-scaling up")
+
+-- ---------------------------------------------------------------------------
+-- Utilities
+-- ---------------------------------------------------------------------------
+
+o.bind("SUPER + V", "Clipboard manager", "omarchy-shell shell toggle omarchy.clipboard")
+o.bind("SUPER + I", "Calendar", "omarchy-shell shell toggle omarchy.clock")
+o.bind("SUPER + H", "Toggle weather", "omarchy-notification-weather")
+o.bind("SUPER + L", "Lock system", "omarchy-system-lock")
+
+-- Reminders on R: set, +CTRL show, +CTRL+ALT clear.
+o.bind("SUPER + R", "Set reminder", "omarchy-menu toggle reminder-set")
+o.bind("SUPER + CTRL + R", "Show reminders", "omarchy-reminder show")
+o.bind("SUPER + CTRL + ALT + R", "Clear reminders", "omarchy-reminder clear")
+
+-- ---------------------------------------------------------------------------
+-- Keyboard layout
+-- ---------------------------------------------------------------------------
+
+-- GNOME-style layout switching. Tap SUPER+SPACE to flip to the last used
+-- layout; hold SUPER and press SPACE repeatedly to walk the layouts in
+-- most-recently-used order. The choice is committed when SUPER is released.
+-- Indexes match kb_layout in input.lua.
 local kb_mru = { 0, 1, 2 }
 local kb_pos = nil
 local kb_timer = nil
@@ -59,89 +217,4 @@ local function kb_cycle()
   end
 end
 
-hl.unbind("SUPER + SPACE")
 hl.bind("SUPER + SPACE", kb_cycle, { description = "Switch keyboard layout" })
-
--- Tap SUPER alone to open the Omarchy menu (fires on release, so SUPER combos still work).
-o.bind("SUPER + SUPER_L", "Omarchy menu", "omarchy-menu toggle", { release = true })
-
--- Apps menu on SUPER+A (was: SUPER+ALT+SPACE).
-hl.unbind("SUPER + ALT + SPACE")
-o.bind("SUPER + A", "Apps menu", "omarchy-menu toggle apps")
-
--- ---------------------------------------------------------------------------
--- Personal keymap rework
--- ---------------------------------------------------------------------------
-
--- Free the old default keys.
-hl.unbind("SUPER + RETURN")              -- was: Terminal
-hl.unbind("SUPER + SHIFT + RETURN")      -- was: Browser
-hl.unbind("SUPER + SHIFT + B")           -- was: Browser
-hl.unbind("SUPER + SHIFT + ALT + B")     -- was: Browser (private)
-hl.unbind("SUPER + SHIFT + F")           -- was: File manager
-hl.unbind("SUPER + ALT + SHIFT + F")     -- was: File manager (cwd)
-hl.unbind("SUPER + SHIFT + N")           -- was: Editor
-hl.unbind("SUPER + W")                   -- was: Close window
-hl.unbind("CTRL + ALT + DELETE")         -- was: Close all windows
-hl.unbind("SUPER + T")                   -- was: Toggle floating/tiling
-hl.unbind("SUPER + K")                   -- was: Keybindings
-
--- Applications
-o.bind("SUPER + T", "Terminal", { omarchy = "terminal" })
-o.bind("SUPER + B", "Browser", { omarchy = "browser" })
-o.bind("SUPER + ALT + B", "Browser (private)", { omarchy = "browser --private" })
-o.bind("SUPER + D", "File manager", { omarchy = "nautilus" })
-o.bind("SUPER + ALT + D", "File manager (cwd)", { omarchy = "nautilus-cwd" })
-o.bind("SUPER + E", "Editor", { omarchy = "editor" })
-
--- Window actions
-o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
-o.bind("SUPER + SHIFT + Q", "Close all windows", "omarchy-hyprland-window-close-all")
-o.bind("SUPER + K", "Toggle window floating/tiling", hl.dsp.window.float({ action = "toggle" }))
-
--- Utilities
-hl.unbind("SUPER + ALT + K")             -- was: Tmux keybindings
-hl.unbind("SUPER + CTRL + K")            -- was: Herdr keybindings
-o.bind("SUPER + M", "Keybindings", "omarchy-menu-keybindings")
-o.bind("SUPER + ALT + M", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
-o.bind("SUPER + CTRL + M", "Herdr keybindings", "omarchy-menu-herdr-keybindings")
-
--- Resize with arrows (hold to repeat). Frees the group prev/next duplicate.
-hl.unbind("SUPER + CTRL + LEFT")         -- was: Move grouped window focus left
-hl.unbind("SUPER + CTRL + RIGHT")        -- was: Move grouped window focus right
-local resize_steps = {
-  { mods = "SUPER + CTRL", size = 100, label = "" },
-  { mods = "SUPER + CTRL + SHIFT", size = 25, label = " a little" },
-}
-for _, step in ipairs(resize_steps) do
-  local s = step.size
-  o.bind(step.mods .. " + RIGHT", "Grow window width" .. step.label, hl.dsp.window.resize({ x = s, y = 0, relative = true }), { repeating = true })
-  o.bind(step.mods .. " + LEFT", "Shrink window width" .. step.label, hl.dsp.window.resize({ x = -s, y = 0, relative = true }), { repeating = true })
-  o.bind(step.mods .. " + DOWN", "Grow window height" .. step.label, hl.dsp.window.resize({ x = 0, y = s, relative = true }), { repeating = true })
-  o.bind(step.mods .. " + UP", "Shrink window height" .. step.label, hl.dsp.window.resize({ x = 0, y = -s, relative = true }), { repeating = true })
-end
-
--- Disable the old -/= resize keys (resizing lives on arrows now).
-for _, mods in ipairs({ "SUPER", "SUPER + SHIFT", "SUPER + ALT", "SUPER + SHIFT + ALT", "SUPER + CTRL", "SUPER + CTRL + SHIFT" }) do
-  hl.unbind(mods .. " + code:20")
-  hl.unbind(mods .. " + code:21")
-end
-
--- Scratchpad
-hl.unbind("SUPER + ALT + S")             -- was: Move window to scratchpad
-o.bind("SUPER + SHIFT + S", "Move window to scratchpad", hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
-
--- Clipboard history
-hl.unbind("SUPER + CTRL + V")            -- was: Clipboard manager
-o.bind("SUPER + Z", "Clipboard manager", "omarchy-shell shell toggle omarchy.clipboard")
-
--- Menus
-hl.unbind("SUPER + SHIFT + code:201")    -- was: Omarchy menu (Copilot key, not present)
-hl.unbind("SUPER + SHIFT + CTRL + A")    -- was: Agent
-o.bind("SUPER + N", "Agent", "omarchy-agent --pick")
-
--- Info
-hl.unbind("SUPER + CTRL + ALT + W")      -- was: Toggle weather
-hl.unbind("SUPER + CTRL + Q")            -- was: Calculator
-o.bind("SUPER + W", "Toggle weather", "omarchy-notification-weather")
-o.bind("SUPER + R", "Calculator", "omacalc")
