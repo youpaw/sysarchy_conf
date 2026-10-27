@@ -22,8 +22,8 @@ Personal customizations for [Omarchy](https://omarchy.org/).
 - **Screensaver inhibit bridge** (`~/.local/bin/screensaver-inhibit-bridge`, a
   systemd user service): owns `org.freedesktop.ScreenSaver`, so apps that ask
   to stay awake over D-Bus count too. Firefox goes through the desktop portal,
-  whose GTK backend forwards to that name, and nothing owned it, so YouTube
-  never blocked the screensaver. Active inhibitors are listed in
+  whose GTK backend forwards to that name, and nothing owned it, so video in
+  the browser never blocked the screensaver. Active inhibitors are listed in
   `$XDG_RUNTIME_DIR/screensaver-inhibit` and shown as `appInhibitors` in
   `omarchy-shell idle status`.
 
