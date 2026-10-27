@@ -26,6 +26,14 @@ Personal customizations for [Omarchy](https://omarchy.org/).
   the browser never blocked the screensaver. Active inhibitors are listed in
   `$XDG_RUNTIME_DIR/screensaver-inhibit` and shown as `appInhibitors` in
   `omarchy-shell idle status`.
+- **Ghostty splits** (`ghostty/config`): `Ctrl+Shift+A` splits right,
+  `Ctrl+Shift+D` down, `Ctrl+Shift+X` closes, `Ctrl+Shift+S` equalizes,
+  `Ctrl+Shift+Enter` zooms. `Ctrl+Shift+H/J/K/L` moves focus;
+  `Ctrl+Alt+arrows` resizes, add `Shift` for a little. The stock resize keys
+  (`Super+Ctrl+Shift+arrows`) are taken by Hyprland's window resize.
+- **Quiet shell env** (`.bashrc`): Hyprland exports the theme's gum styling
+  (~110 `GUM_*` vars) to every process; interactive bash drops them and passes
+  them to `gum` only.
 
 ## Install
 
