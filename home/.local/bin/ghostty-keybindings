@@ -1,0 +1,52 @@
+#!/bin/bash
+# Show Ghostty's resolved keybindings (defaults plus ~/.config/ghostty/config)
+# in a searchable Omarchy menu. --print writes the list to stdout instead.
+
+output_keybindings() {
+  ghostty +list-keybinds 2>/dev/null | awk '
+    /^keybind = / {
+      sub(/^keybind = /, "")
+
+      # The key itself can be "+" or "=" (ctrl++=..., ctrl+==...), so split
+      # on "+" and "=" only where they separate keys, never inside one.
+      keys = ""
+      i = 1
+      while (1) {
+        ch = substr($0, i, 1)
+        if (ch == "+" || ch == "=") {
+          key = ch
+          i++
+        } else {
+          key = ""
+          while (i <= length($0) && (ch = substr($0, i, 1)) != "+" && ch != "=") {
+            key = key ch
+            i++
+          }
+        }
+        sub(/^arrow_/, "", key)
+        if (key == "bracket_left") key = "["
+        if (key == "bracket_right") key = "]"
+        keys = keys (keys == "" ? "" : " + ") key
+        if (substr($0, i, 1) == "=") break
+        i++
+      }
+      action = substr($0, i + 1)
+
+      gsub(/[_,]/, " ", action)
+      sub(/:/, ": ", action)
+      action = toupper(substr(action, 1, 1)) substr(action, 2)
+
+      printf "%-36s → %s\n", toupper(keys), action
+    }
+  '
+}
+
+if [[ $1 == "--print" || $1 == "-p" ]]; then
+  output_keybindings
+  exit 0
+fi
+
+monitor_height=$(hyprctl monitors -j 2>/dev/null | jq -r '.[] | select(.focused == true) | .height' 2>/dev/null)
+[[ $monitor_height =~ ^[0-9]+$ ]] && ((monitor_height > 0)) || monitor_height=900
+
+output_keybindings | omarchy-menu-select 'Ghostty keybindings' -- --width 800 --height $((monitor_height * 40 / 100)) >/dev/null || true

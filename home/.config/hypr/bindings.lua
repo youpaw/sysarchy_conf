@@ -78,7 +78,7 @@ o.bind("SUPER + A", "Apps menu", "omarchy-menu toggle apps")
 o.bind("SUPER + N", "Agent", "omarchy-agent --pick")
 o.bind("SUPER + M", "Keybindings", "omarchy-menu-keybindings")
 o.bind("SUPER + ALT + M", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
-o.bind("SUPER + CTRL + M", "Herdr keybindings", "omarchy-menu-herdr-keybindings")
+o.bind("SUPER + CTRL + M", "Ghostty keybindings", "ghostty-keybindings")
 
 -- ---------------------------------------------------------------------------
 -- Applications
