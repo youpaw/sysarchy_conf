@@ -15,3 +15,6 @@ hl.config({
 
 -- Workspaces slide vertically, following the three-finger up/down swipe.
 hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "easeOutQuint", style = "slidevert" })
+
+-- Audio mixer floats like btop and stays pinned across workspaces.
+o.window("org.omarchy.wiremix", { float = true, center = true, size = { 875, 600 }, pin = true })

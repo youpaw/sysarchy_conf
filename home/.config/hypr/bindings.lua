@@ -92,6 +92,11 @@ o.bind("SUPER + ALT + D", "File manager (cwd)", { omarchy = "nautilus-cwd" })
 o.bind("SUPER + E", "Omawrite", { launch = "omawrite" })
 o.bind("SUPER + C", "Calculator", "omacalc")
 
+-- TUIs: focus the running instance instead of opening another one.
+hl.unbind("SUPER + CTRL + T")            -- was: Activity (new btop every press)
+o.bind("SUPER + CTRL + T", "Activity", { tui = "btop", focus = true })
+o.bind("SUPER + CTRL + ALT + A", "Audio mixer", { tui = "wiremix", focus = true })
+
 -- ---------------------------------------------------------------------------
 -- Windows
 -- ---------------------------------------------------------------------------
