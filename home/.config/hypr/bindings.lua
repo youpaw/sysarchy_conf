@@ -91,6 +91,7 @@ o.bind("SUPER + D", "File manager", { omarchy = "nautilus" })
 o.bind("SUPER + ALT + D", "File manager (cwd)", { omarchy = "nautilus-cwd" })
 o.bind("SUPER + E", "Omawrite", { launch = "omawrite" })
 o.bind("SUPER + C", "Calculator", "omacalc")
+o.bind("SUPER + GRAVE", "Music (Sidra)", { launch = "sidra", focus = "^[Ss]idra$" })
 
 -- TUIs: focus the running instance instead of opening another one.
 hl.unbind("SUPER + CTRL + T")            -- was: Activity (new btop every press)

@@ -18,3 +18,6 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "easeOut
 
 -- Audio mixer floats like btop and stays pinned across workspaces.
 o.window("org.omarchy.wiremix", { float = true, center = true, size = { 875, 600 }, pin = true })
+
+-- Sidra opens popped out (float, center, pin, a bit smaller than Super+P).
+o.window("^[Ss]idra$", { float = true, center = true, size = { 1200, 800 }, pin = true })

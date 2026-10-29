@@ -11,7 +11,8 @@ Personal customizations for [Omarchy](https://omarchy.org/).
   the layout in the Omarchy OSD. The bar's layout widget sits next to the tray.
 - **Bindings**: tap `Super` alone for the Omarchy menu, `Super+A` for apps,
   `Super+Ctrl+M` for Ghostty keybindings (`ghostty-keybindings`, in place of
-  Herdr's).
+  Herdr's), `` Super+` `` for Sidra (opens popped out, focuses the open window). fcitx5's
+  QuickPhrase trigger on `` Super+` `` is cleared (`fcitx5/conf/quickphrase.conf`).
 - **niri-style scrolling** (`hypr/looknfeel.lua`): every workspace uses the
   scrolling layout. Windows sit on a horizontal tape and keep their width, a
   lone window included, and the focused column is centered. Workspaces slide
