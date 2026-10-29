@@ -16,8 +16,8 @@ Personal customizations for [Omarchy](https://omarchy.org/).
 - **niri-style scrolling** (`hypr/looknfeel.lua`): every workspace uses the
   scrolling layout. Windows sit on a horizontal tape and keep their width, a
   lone window included, and the focused column is centered. Workspaces slide
-  vertically. Slack, Telegram and Discord open popped out like Sidra
-  (floating, centered, 1200x800, pinned).
+  vertically. Slack, Telegram and Discord open popped out
+  (floating, centered, pinned) at their own size.
 - **Touchpad**: three-finger left/right scrolls between windows in the
   workspace; three-finger up/down switches workspaces.
 - **Idle** (`plugins/youpaw.idle`, a clone of `omarchy.idle`): a playing video
