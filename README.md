@@ -41,6 +41,10 @@ Personal customizations for [Omarchy](https://omarchy.org/).
 - **Quiet shell env** (`.bashrc`): Hyprland exports the theme's gum styling
   (~110 `GUM_*` vars) to every process; interactive bash drops them and passes
   them to `gum` only.
+- **Neovim**: [syslazy_conf](https://github.com/youpaw/syslazy_conf), a
+  LazyVim config built on Omarchy's. `install.sh` clones it into
+  `~/.config/nvim`, or pulls it if it's already there, and pins the plugins
+  to its lockfile. On Omarchy it follows the system theme and hot-reloads it.
 
 ## Install
 
