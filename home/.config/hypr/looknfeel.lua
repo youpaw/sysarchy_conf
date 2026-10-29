@@ -21,3 +21,6 @@ o.window("org.omarchy.wiremix", { float = true, center = true, size = { 875, 600
 
 -- Sidra opens popped out (float, center, pin, a bit smaller than Super+P).
 o.window("^[Ss]idra$", { float = true, center = true, size = { 1200, 800 }, pin = true })
+
+-- Chat apps open popped out too, same as Sidra.
+o.window("^(Slack|discord|org\\.telegram\\.desktop|TelegramDesktop)$", { float = true, center = true, size = { 1200, 800 }, pin = true })
