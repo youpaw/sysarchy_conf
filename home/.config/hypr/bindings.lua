@@ -16,7 +16,8 @@ hl.unbind("SUPER + SHIFT + ALT + B")     -- was: Browser (private)
 hl.unbind("SUPER + SHIFT + F")           -- was: File manager
 hl.unbind("SUPER + ALT + SHIFT + F")     -- was: File manager (cwd)
 hl.unbind("SUPER + SHIFT + N")           -- was: Editor
-hl.unbind("SUPER + CTRL + Q")            -- was: Calculator
+hl.unbind("SUPER + CTRL + T")            -- was: Theme menu (still on SUPER + SHIFT + CTRL + SPACE)
+hl.unbind("SUPER + SHIFT + T")           -- was: Activity (duplicate)
 
 -- Menus
 hl.unbind("SUPER + SPACE")               -- was: Omarchy menu
@@ -26,10 +27,19 @@ hl.unbind("SUPER + SHIFT + CTRL + A")    -- was: Agent
 hl.unbind("SUPER + K")                   -- was: Keybindings
 hl.unbind("SUPER + ALT + K")             -- was: Tmux keybindings
 hl.unbind("SUPER + CTRL + K")            -- was: Herdr keybindings
+hl.unbind("SUPER + A")                   -- was: Select all
+hl.unbind("SUPER + grave")               -- was: Toggle Quake console
+hl.unbind("SUPER + SHIFT + grave")       -- was: Move window to Quake console
 
 -- Windows
-hl.unbind("SUPER + W")                   -- was: Close window
+hl.unbind("SUPER + W")                   -- was: Close window (SUPER + Q stays)
+hl.unbind("SUPER + M")                   -- was: Minimize window to the dock
 hl.unbind("CTRL + ALT + DELETE")         -- was: Close all windows
+-- Super+Ctrl+Shift+arrows belong to the small resize below.
+hl.unbind("SUPER + SHIFT + CTRL + LEFT")  -- was: Move window to left monitor
+hl.unbind("SUPER + SHIFT + CTRL + RIGHT") -- was: Move window to right monitor
+hl.unbind("SUPER + SHIFT + CTRL + UP")    -- was: Move window to up monitor
+hl.unbind("SUPER + SHIFT + CTRL + DOWN")  -- was: Move window to down monitor
 hl.unbind("SUPER + T")                   -- was: Toggle floating/tiling
 hl.unbind("SUPER + O")                   -- was: Pop window out (float & pin)
 hl.unbind("SUPER + P")                   -- was: Pseudo window
@@ -46,7 +56,8 @@ for _, mods in ipairs({ "SUPER", "SUPER + SHIFT", "SUPER + ALT", "SUPER + SHIFT 
 end
 
 -- Workspaces
-hl.unbind("SUPER + L")                   -- was: Toggle workspace layout
+hl.unbind("SUPER + L")                   -- was: Cycle workspace layout
+hl.unbind("SUPER + ALT + L")             -- was: Cycle workspace layout back
 hl.unbind("SUPER + ALT + S")             -- was: Move window to scratchpad
 
 -- Look
@@ -60,6 +71,9 @@ hl.unbind("SUPER + ALT + SLASH")         -- was: Monitor scaling down
 hl.unbind("SUPER + C")                   -- was: Universal copy
 hl.unbind("SUPER + V")                   -- was: Universal paste
 hl.unbind("SUPER + X")                   -- was: Universal cut
+hl.unbind("SUPER + I")                   -- was: Switch input language (layouts live on SUPER + SPACE)
+hl.unbind("SUPER + SHIFT + I")           -- was: Switch input language back
+hl.unbind("SUPER + CTRL + W")            -- was: Background switcher (SUPER + CTRL + SPACE stays)
 hl.unbind("SUPER + CTRL + V")            -- was: Clipboard manager
 hl.unbind("SUPER + CTRL + R")            -- was: Set reminder
 hl.unbind("SUPER + CTRL + ALT + R")      -- was: Show reminders
@@ -75,7 +89,8 @@ hl.unbind("SUPER + CTRL + L")            -- was: Lock system
 -- Tap SUPER alone for the Omarchy menu (fires on release, so SUPER combos still work).
 o.bind("SUPER + SUPER_L", "Omarchy menu", "omarchy-menu toggle", { release = true })
 o.bind("SUPER + A", "Apps menu", "omarchy-menu toggle apps")
-o.bind("SUPER + N", "Agent", "omarchy-agent --pick")
+o.bind("SUPER + N", "Toggle Quake console", hl.dsp.workspace.toggle_special("qconsole"))
+o.bind("SUPER + SHIFT + N", "Move window to Quake console", hl.dsp.window.move({ workspace = "special:qconsole", follow = false }))
 o.bind("SUPER + M", "Keybindings", "omarchy-menu-keybindings")
 o.bind("SUPER + ALT + M", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
 o.bind("SUPER + CTRL + M", "Ghostty keybindings", "ghostty-keybindings")
@@ -94,7 +109,6 @@ o.bind("SUPER + C", "Calculator", "omacalc")
 o.bind("SUPER + GRAVE", "Music (Sidra)", { launch = "sidra", focus = "^[Ss]idra$" })
 
 -- TUIs: focus the running instance instead of opening another one.
-hl.unbind("SUPER + CTRL + T")            -- was: Activity (new btop every press)
 o.bind("SUPER + CTRL + T", "Activity", { tui = "btop", focus = true })
 o.bind("SUPER + CTRL + ALT + A", "Audio mixer", { tui = "wiremix", focus = true })
 
@@ -113,7 +127,6 @@ local function on_layout(layout, dispatcher)
   end
 end
 
-o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
 o.bind("SUPER + SHIFT + Q", "Close all windows", "omarchy-hyprland-window-close-all")
 
 -- State: float on O, pop out on P, pseudo on U.
@@ -159,7 +172,8 @@ o.bind("SUPER + SHIFT + K", "Move window to workspace above", hl.dsp.window.move
 o.bind("SUPER + SHIFT + ALT + J", "Move window silently to workspace below", hl.dsp.window.move({ workspace = "r+1", follow = false }))
 o.bind("SUPER + SHIFT + ALT + K", "Move window silently to workspace above", hl.dsp.window.move({ workspace = "r-1", follow = false }))
 
-o.bind("SUPER + Y", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
+o.bind("SUPER + Y", "Cycle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
+o.bind("SUPER + ALT + Y", "Cycle workspace layout back", "omarchy-hyprland-workspace-layout-toggle back")
 o.bind("SUPER + SHIFT + S", "Move window to scratchpad", hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
 
 -- ---------------------------------------------------------------------------

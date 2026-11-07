@@ -36,9 +36,13 @@ Personal customizations for [Omarchy](https://omarchy.org/).
   `Ctrl+Alt+arrows` resizes, add `Shift` for a little. The stock resize keys
   (`Super+Ctrl+Shift+arrows`) are taken by Hyprland's window resize.
   fcitx5's word-hint toggles on `Ctrl+Alt+H/J` are cleared
-  (`fcitx5/conf/keyboard.conf`) so those keys reach Ghostty.
+  (`fcitx5/conf/keyboard.conf`) so those keys reach Ghostty. Ghostty has no
+  keybind action for moving a split; drag its handle with the mouse to turn a
+  vertical split into a horizontal one.
 - **Ghostty tabs**: `Ctrl+Shift+[` / `]` switch tabs, add `Alt` to move the
-  current tab left/right; `Ctrl+Shift+X` closes it.
+  current tab left/right; `Ctrl+Shift+X` closes it; `Alt+1..8` jump to a tab.
+- **One key per action**: stock Ghostty aliases and Hyprland binds that clashed
+  with these are unbound, so a key never fires two actions.
 - **Quiet shell env** (`.bashrc`): Hyprland exports the theme's gum styling
   (~110 `GUM_*` vars) to every process; interactive bash drops them and passes
   them to `gum` only.
