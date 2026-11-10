@@ -46,9 +46,10 @@ keybind = super+ctrl+shift+arrow_up=unbind
 keybind = super+ctrl+shift+arrow_down=unbind
 keybind = super+ctrl+shift+arrow_left=unbind
 keybind = super+ctrl+shift+arrow_right=unbind
+
+# Youpaw bindings
 keybind = ctrl+alt+a=new_split:right
 keybind = ctrl+alt+d=new_split:down
-keybind = ctrl+alt+x=close_surface
 keybind = ctrl+alt+s=equalize_splits
 keybind = ctrl+alt+z=toggle_split_zoom
 # Focus, vim-style.
@@ -66,12 +67,14 @@ keybind = ctrl+alt+shift+arrow_down=resize_split:down,25
 keybind = ctrl+alt+shift+arrow_left=resize_split:left,25
 keybind = ctrl+alt+shift+arrow_right=resize_split:right,25
 
-# Tabs: Ctrl+Shift+[ / ] switch, add Alt to move the tab; Ctrl+Shift+X closes.
-keybind = ctrl+shift+bracket_left=previous_tab
-keybind = ctrl+shift+bracket_right=next_tab
-keybind = ctrl+shift+alt+bracket_left=move_tab:-1
-keybind = ctrl+shift+alt+bracket_right=move_tab:1
-keybind = ctrl+shift+x=close_tab:this
+# Tabs on the same Ctrl+Alt family: T opens, [ / ] switch, add Shift to move the tab; Q closes.
+keybind = ctrl+alt+t=new_tab
+keybind = ctrl+alt+bracket_left=previous_tab
+keybind = ctrl+alt+bracket_right=next_tab
+keybind = ctrl+alt+shift+bracket_left=move_tab:-1
+keybind = ctrl+alt+shift+bracket_right=move_tab:1
+keybind = ctrl+alt+q=close_tab:this
+keybind = ctrl+shift+t=unbind
 keybind = ctrl+page_up=unbind
 keybind = ctrl+page_down=unbind
 keybind = ctrl+shift+w=unbind
